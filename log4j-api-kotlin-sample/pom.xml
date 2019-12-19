@@ -18,14 +18,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.apache.logging.log4j</groupId>
+    <groupId>com.ripstech.coffeecup.logging.log4k</groupId>
     <artifactId>log4j-api-kotlin-parent</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.0-dev</version>
     <relativePath>../</relativePath>
   </parent>
 
   <artifactId>log4j-api-kotlin-sample</artifactId>
-  <version>1.0.1-SNAPSHOT</version>
+  <version>1.0.0-dev</version>
   <packaging>jar</packaging>
   <name>Apache Log4j Kotlin API Samples</name>
   <description>Sample usage of the Log4j Kotlin API</description>
@@ -37,7 +37,7 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
+      <groupId>com.ripstech.coffeecup.logging.log4k</groupId>
       <artifactId>log4j-api-kotlin</artifactId>
     </dependency>
     <dependency>
@@ -68,6 +68,9 @@
             </goals>
           </execution>
         </executions>
+        <configuration>
+          <jvmTarget>1.8</jvmTarget>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
@@ -76,10 +79,6 @@
         <configuration>
           <mainClass>org.apache.logging.log4j.kotlin.sample.LoggingApp</mainClass>
         </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
       </plugin>
     </plugins>
   </build>

@@ -17,47 +17,23 @@
   -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>org.apache.logging</groupId>
-    <artifactId>logging-parent</artifactId>
-    <version>2</version>
-  </parent>
 
-  <groupId>org.apache.logging.log4j</groupId>
+  <groupId>com.ripstech.coffeecup.logging.log4k</groupId>
   <artifactId>log4j-api-kotlin-parent</artifactId>
-  <version>1.0.1-SNAPSHOT</version>
+  <version>1.0.0-dev</version>
   <packaging>pom</packaging>
   <name>Apache Log4j Kotlin API Parent</name>
   <description>Apache Log4j Kotlin API parent project</description>
 
-  <!-- TODO: website publishing -->
-  <url>https://logging.apache.org/log4j/kotlin/</url>
-  <scm>
-    <connection>scm:git:http://git-wip-us.apache.org/repos/asf/logging-log4j-kotlin.git</connection>
-    <developerConnection>scm:git:https://git-wip-us.apache.org/repos/asf/logging-log4j-kotlin.git</developerConnection>
-    <url>https://git-wip-us.apache.org/repos/asf?p=logging-log4j-kotlin.git;a=summary</url>
-    <tag>HEAD</tag>
-  </scm>
-
-  <distributionManagement>
-    <site>
-      <id>apache.website</id>
-      <url>scp://people.apache.org/www/logging.apache.org/log4j-kotlin-api</url>
-    </site>
-  </distributionManagement>
-
   <properties>
-    <Log4jKotlinVersion>1.0.0</Log4jKotlinVersion>
-    <Log4jReleaseManager>Matt Sicker</Log4jReleaseManager>
-    <Log4jReleaseKey>748F15B2CF9BA8F024155E6ED7C92B70FA1C814D</Log4jReleaseKey>
     <changes.plugin.version>2.12</changes.plugin.version>
     <checkstyle.plugin.version>2.17</checkstyle.plugin.version>
     <dokka.plugin.version>0.9.17</dokka.plugin.version>
     <findbugs.plugin.version>3.0.5</findbugs.plugin.version>
     <javadoc.plugin.version>2.10.3</javadoc.plugin.version>
     <jxr.plugin.version>2.5</jxr.plugin.version>
-    <kotlin.version>1.3.0</kotlin.version>
-    <log4j.version>2.11.0</log4j.version>
+    <kotlin.version>1.3.61</kotlin.version>
+    <log4j.version>2.13.0</log4j.version>
     <pmd.plugin.version>3.8</pmd.plugin.version>
     <rat.plugin.version>0.12</rat.plugin.version>
     <site.plugin.version>3.4</site.plugin.version>
@@ -72,7 +48,7 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>org.apache.logging.log4j</groupId>
+        <groupId>com.ripstech.coffeecup.logging.log4k</groupId>
         <artifactId>log4j-api-kotlin</artifactId>
         <version>${project.version}</version>
       </dependency>
@@ -165,6 +141,9 @@
             </goals>
           </execution>
         </executions>
+        <configuration>
+          <jvmTarget>1.8</jvmTarget>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.asciidoctor</groupId>
@@ -184,48 +163,6 @@
         </configuration>
       </plugin>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-site-plugin</artifactId>
-        <version>${site.plugin.version}</version>
-        <dependencies>
-          <dependency>
-            <groupId>org.apache.velocity</groupId>
-            <artifactId>velocity</artifactId>
-            <version>${velocity.plugin.version}</version>
-          </dependency>
-          <dependency>
-            <groupId>org.apache.maven.wagon</groupId>
-            <artifactId>wagon-ssh</artifactId>
-            <version>2.9</version>
-          </dependency>
-          <dependency>
-            <groupId>org.asciidoctor</groupId>
-            <artifactId>asciidoctor-maven-plugin</artifactId>
-            <version>${asciidoc.plugin.version}</version>
-          </dependency>
-        </dependencies>
-        <configuration>
-          <!-- only build English site even on other language OS -->
-          <locales>en</locales>
-          <!-- Exclude the navigation file for Maven 1 sites
-               and the changes file used by the changes-plugin,
-               as they interfere with the site generation. -->
-          <moduleExcludes>
-            <xdoc>navigation.xml,changes.xml</xdoc>
-          </moduleExcludes>
-          <templateDirectory>${log4jParentDir}/src/site</templateDirectory>
-          <template>site.vm</template>
-          <asciidoc>
-            <attributes>
-              <!-- copy any site properties wanted in asciidoc files -->
-              <Log4jReleaseVersion>${Log4jReleaseVersion}</Log4jReleaseVersion>
-              <Log4jReleaseManager>${Log4jReleaseManager}</Log4jReleaseManager>
-              <Log4jReleaseKey>${Log4jReleaseKey}</Log4jReleaseKey>
-            </attributes>
-          </asciidoc>
-        </configuration>
-      </plugin>
-      <plugin>
         <groupId>org.jetbrains.dokka</groupId>
         <artifactId>dokka-maven-plugin</artifactId>
         <configuration>
@@ -236,67 +173,6 @@
   </build>
   <reporting>
     <plugins>
-      <!-- Changes report -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-changes-plugin</artifactId>
-        <version>${changes.plugin.version}</version>
-        <reportSets>
-          <reportSet>
-            <reports>
-              <report>changes-report</report>
-              <report>jira-report</report>
-            </reports>
-          </reportSet>
-        </reportSets>
-        <configuration>
-          <statusIds>Resolved, Closed</statusIds>
-          <columnNames>Type,Key,Summary,Assignee,Status,Resolution,Fix Version</columnNames>
-          <component>Kotlin API</component>
-          <useJql>true</useJql>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-project-info-reports-plugin</artifactId>
-        <version>2.8.1</version>
-        <reportSets>
-          <reportSet>
-            <reports>
-              <report>index</report>
-              <report>dependencies</report>
-              <report>dependency-info</report>
-              <report>dependency-convergence</report>
-              <report>dependency-management</report>
-              <report>project-team</report>
-              <report>mailing-list</report>
-              <report>issue-tracking</report>
-              <report>license</report>
-              <report>scm</report>
-              <report>summary</report>
-            </reports>
-          </reportSet>
-        </reportSets>
-        <configuration>
-          <!-- you'd think these would be the defaults, right? -->
-          <customBundle>${project.basedir}/src/site/custom/project-info-report.properties</customBundle>
-          <webAccessUrl>${project.scm.url}</webAccessUrl>
-          <anonymousConnection>${project.scm.connection}</anonymousConnection>
-          <developerConnection>${project.scm.developerConnection}</developerConnection>
-          <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>${javadoc.plugin.version}</version>
-        <configuration>
-          <aggregate>true</aggregate>
-          <bottom><![CDATA[<p align="center">Copyright &#169; {inceptionYear}-{currentYear} {organizationName}. All Rights Reserved.<br />
-            Apache Logging, Apache Log4j, Apache Log4j Audit, Log4j, Log4j Audit, Apache, the Apache feather logo, the Apache Logging project logo,
-            and the Apache Log4j logo are trademarks of The Apache Software Foundation.</p>]]></bottom>
-        </configuration>
-      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
@@ -324,25 +200,6 @@
           </reportSet>
         </reportSets>
       </plugin>
-      <!-- RAT report -->
-      <plugin>
-        <groupId>org.apache.rat</groupId>
-        <artifactId>apache-rat-plugin</artifactId>
-        <version>${rat.plugin.version}</version>
-        <configuration>
-          <excludes>
-            <exclude>**/*.asc</exclude>
-            <exclude>.idea/**/*</exclude>
-            <exclude>src/site/resources/js/jquery.js</exclude>
-            <exclude>src/site/resources/js/jquery.min.js</exclude>
-            <!-- Generated files -->
-            <exclude>log4j-api-kotlin-distribution/target/**/*</exclude>
-            <exclude>log4j-api-kotlin-distribution/.project</exclude>
-            <exclude>log4j-api-kotlin-distribution/.settings/**</exclude>
-            <exclude>RELEASE-NOTES.md</exclude>
-          </excludes>
-        </configuration>
-      </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>findbugs-maven-plugin</artifactId>
@@ -355,52 +212,8 @@
           <excludeFilterFile>${log4jParentDir}/findbugs-exclude-filter.xml</excludeFilterFile>
         </configuration>
       </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jxr-plugin</artifactId>
-        <version>${jxr.plugin.version}</version>
-        <reportSets>
-          <reportSet>
-            <id>non-aggregate</id>
-            <reports>
-              <report>jxr</report>
-            </reports>
-          </reportSet>
-          <reportSet>
-            <id>aggregate</id>
-            <reports>
-              <report>aggregate</report>
-            </reports>
-          </reportSet>
-        </reportSets>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-pmd-plugin</artifactId>
-        <version>${pmd.plugin.version}</version>
-        <configuration>
-          <targetJdk>${maven.compiler.target}</targetJdk>
-        </configuration>
-      </plugin>
     </plugins>
   </reporting>
-  <pluginRepositories>
-    <pluginRepository>
-      <id>jcenter</id>
-      <name>JCenter</name>
-      <url>https://jcenter.bintray.com/</url>
-    </pluginRepository>
-  </pluginRepositories>
-  <repositories>
-    <repository>
-      <id>apache.snapshots</id>
-      <name>Apache Snapshot Repository</name>
-      <url>https://repository.apache.org/snapshots</url>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-    </repository>
-  </repositories>
 
   <modules>
     <module>log4j-api-kotlin</module>
