@@ -211,8 +211,8 @@ class KotlinLogger(val delegate: ExtendedLogger) {
     return delegate.traceEntry(*paramSuppliers.asLog4jSuppliers())
   }
 
-  fun traceEntry(vararg params: Any?): EntryMessage {
-    return delegate.traceEntry(null, params)
+  fun traceEntry(formatString: String, vararg params: Any?): EntryMessage {
+    return delegate.traceEntry(formatString, params)
   }
 
   // TODO entry with fqcn is not part of the ExtendedLogger interface, location-awareness will be broken
