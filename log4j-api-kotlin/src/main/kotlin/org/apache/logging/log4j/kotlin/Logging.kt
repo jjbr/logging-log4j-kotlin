@@ -42,6 +42,7 @@ package org.apache.logging.log4j.kotlin
  *
  * ```
  */
+@Deprecated("TODO")
 interface Logging {
   @Suppress("unused")
   val logger
