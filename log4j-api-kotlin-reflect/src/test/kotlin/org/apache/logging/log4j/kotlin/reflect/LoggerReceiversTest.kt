@@ -14,32 +14,41 @@
  * See the license for the specific language governing permissions and
  * limitations under the license.
  */
-package org.apache.logging.log4j.kotlin
+package org.apache.logging.log4j.kotlin.reflect
 
-import org.apache.logging.log4j.Level.ERROR
+import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.junit.LoggerContextRule
-import org.apache.logging.log4j.kotlin.support.withListAppender
+import org.apache.logging.log4j.kotlin.KotlinLogger
+import org.apache.logging.log4j.kotlin.reflect.support.withListAppender
 import org.junit.Rule
 import org.junit.Test
 import kotlin.test.assertEquals
 
-class LoggerMixinExtendsTest : Logging {
-
+class LoggerReceiversTest {
   @Rule @JvmField var init = LoggerContextRule("InfoLogger.xml")
 
   @Test
-  fun `Logging using an interface mix-in logs the correct class name`() {
+  fun `Logging from a function instantiation via class receiver logs the correct class name`() {
+    runTest(LoggerTest.logger())
+  }
+
+  @Test
+  fun `Logging from a function instantiation via object receiver logs the correct class name`() {
+    runTest(LoggerTest().logger())
+  }
+
+  private fun runTest(log: KotlinLogger) {
     val msg = "This is an error log."
     val msgs = withListAppender { _, _ ->
-      logger.error(msg)
+      log.error(msg)
     }
 
     assertEquals(1, msgs.size.toLong())
 
     msgs.first().also {
-      assertEquals(ERROR, it.level)
+      assertEquals(Level.ERROR, it.level)
       assertEquals(msg, it.message.format)
-      assertEquals(LoggerMixinExtendsTest::class.qualifiedName, it.loggerName)
+      assertEquals(LoggerTest::class.qualifiedName, it.loggerName)
     }
   }
 }

@@ -41,6 +41,10 @@
       <artifactId>log4j-api-kotlin</artifactId>
     </dependency>
     <dependency>
+      <groupId>com.ripstech.coffeecup.logging.log4k</groupId>
+      <artifactId>log4j-api-kotlin-reflect</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-core</artifactId>
       <scope>runtime</scope>

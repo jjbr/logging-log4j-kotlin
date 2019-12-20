@@ -14,37 +14,24 @@
  * See the license for the specific language governing permissions and
  * limitations under the license.
  */
-package org.apache.logging.log4j.kotlin
+package org.apache.logging.log4j.kotlin.reflect.support
 
-/**
- * An interface-based "mixin" to easily add a log val to a class, named by the enclosing class. This allows
- * code like this:
- *
- * ```
- * import org.apache.logging.log4j.kotlin.Logging
- *
- * class MyClass: Logging {
- *   // use `logger` as necessary
- * }
- *
- * ```
- *
- * Or declaring the interface on a companion object works just as well:
- *
- * ```
- * import org.apache.logging.log4j.kotlin.logger
- *
- * class MyClass {
- *   companion object: Logging
- *
- *   // use `logger` as necessary
- * }
- *
- * ```
- */
-@Deprecated("TODO")
-interface Logging {
-  @Suppress("unused")
-  val logger
-    get() = loggerOf(this.javaClass)
+import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.core.LogEvent
+import org.apache.logging.log4j.core.Logger
+import org.apache.logging.log4j.test.appender.ListAppender
+
+fun rootLogger() = LogManager.getRootLogger() as Logger
+
+fun withListAppender(block: (rootLogger: Logger, appender: ListAppender) -> Unit): List<LogEvent> {
+  val appender = ListAppender("List").apply { start() }
+  val root = rootLogger().apply { addAppender(appender) }
+
+  try {
+    block(root, appender)
+    return appender.events
+  } finally {
+    appender.stop()
+    root.removeAppender(appender)
+  }
 }

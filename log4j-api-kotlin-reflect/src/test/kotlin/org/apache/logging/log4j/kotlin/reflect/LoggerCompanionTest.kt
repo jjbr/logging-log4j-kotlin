@@ -14,29 +14,23 @@
  * See the license for the specific language governing permissions and
  * limitations under the license.
  */
-package org.apache.logging.log4j.kotlin
+package org.apache.logging.log4j.kotlin.reflect
 
 import org.apache.logging.log4j.Level
-import org.apache.logging.log4j.junit.LoggerContextRule
-import org.apache.logging.log4j.kotlin.support.withListAppender
-import org.junit.Rule
+import org.apache.logging.log4j.kotlin.reflect.support.withListAppender
 import org.junit.Test
 import kotlin.test.assertEquals
 
-class LoggerReceiversTest {
-  @Rule @JvmField var init = LoggerContextRule("InfoLogger.xml")
-
-  @Test
-  fun `Logging from a function instantiation via class receiver logs the correct class name`() {
-    runTest(LoggerTest.logger())
+class LoggerCompanionTest {
+  companion object {
+    val log = logger()
   }
 
-  @Test
-  fun `Logging from a function instantiation via object receiver logs the correct class name`() {
-    runTest(LoggerTest().logger())
-  }
+  // note: using LoggerContextRule here to init the config does nothing as the initialization happens in the companion
+  // log4j will fall back to the default config
 
-  private fun runTest(log: KotlinLogger) {
+  @Test
+  fun `Logging from a function instantiation via companion logs the correct class name`() {
     val msg = "This is an error log."
     val msgs = withListAppender { _, _ ->
       log.error(msg)
@@ -47,7 +41,7 @@ class LoggerReceiversTest {
     msgs.first().also {
       assertEquals(Level.ERROR, it.level)
       assertEquals(msg, it.message.format)
-      assertEquals(LoggerTest::class.qualifiedName, it.loggerName)
+      assertEquals(LoggerCompanionTest::class.qualifiedName, it.loggerName)
     }
   }
 }
