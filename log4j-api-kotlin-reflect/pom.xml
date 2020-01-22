@@ -5,13 +5,13 @@
     <parent>
         <groupId>com.ripstech.coffeecup.logging.log4k</groupId>
         <artifactId>log4j-api-kotlin-parent</artifactId>
-        <version>1.0.0-dev</version>
+        <version>1.0.1</version>
         <relativePath>../</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>log4j-api-kotlin-reflect</artifactId>
-    <version>1.0.0-dev</version>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
     <name>Apache Log4j Kotlin API</name>
     <description>Kotlin wrapper for Log4j API</description>
