@@ -16,7 +16,7 @@
  */
 package org.apache.logging.log4j.kotlin.sample
 
-import org.apache.logging.log4j.kotlin.logger
+import org.apache.logging.log4j.kotlin.reflect.logger
 import java.util.*
 
 object LoggingApp {

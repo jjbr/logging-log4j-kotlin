@@ -17,16 +17,6 @@
 package org.apache.logging.log4j.kotlin
 
 import org.apache.logging.log4j.LogManager
-import org.apache.logging.log4j.spi.ExtendedLogger
-import kotlin.reflect.full.companionObject
-
-/**
- * Logger instantiation by function. Use: `val log = logger()`. The logger will be named according to the
- * receiver of the function, which can be a class or object. An alternative for explicitly named loggers is
- * the [logger(String)] function.
- */
-@Suppress("unused")
-inline fun <reified T : Any> T.logger() = loggerOf(T::class.java)
 
 /**
  * Named logger instantiation by function. Use: `val log = logger('MyLoggerName')`. Generally one should
@@ -41,19 +31,11 @@ fun logger(name: String): KotlinLogger = KotlinLogger(LogManager.getContext(fals
 @Deprecated("Replaced with logger(name)", replaceWith = ReplaceWith("logger"), level = DeprecationLevel.WARNING)
 fun namedLogger(name: String): KotlinLogger = KotlinLogger(LogManager.getContext(false).getLogger(name))
 
-fun loggerDelegateOf(ofClass: Class<*>): ExtendedLogger {
-  return LogManager.getContext(ofClass.classLoader, false).getLogger(unwrapCompanionClass(ofClass).name)
-}
-
-fun loggerOf(ofClass: Class<*>): KotlinLogger {
-  return KotlinLogger(loggerDelegateOf(ofClass))
-}
-
-// unwrap companion class to enclosing class given a Java Class
-private fun <T : Any> unwrapCompanionClass(ofClass: Class<T>): Class<*> {
-  return if (ofClass.enclosingClass?.kotlin?.companionObject?.java == ofClass) {
-    ofClass.enclosingClass
-  } else {
-    ofClass
-  }
+internal fun loggerOf(func: () -> Unit): KotlinLogger {
+  val name = func.javaClass.name
+  return when {
+    name.contains("Kt$") -> name.substringBefore("Kt$")
+    name.contains("$") -> name.substringBefore("$")
+    else -> name
+  }.let { logger(it) }
 }

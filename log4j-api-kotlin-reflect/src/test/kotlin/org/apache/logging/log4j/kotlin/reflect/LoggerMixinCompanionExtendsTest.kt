@@ -14,26 +14,25 @@
  * See the license for the specific language governing permissions and
  * limitations under the license.
  */
-package org.apache.logging.log4j.kotlin
+package org.apache.logging.log4j.kotlin.reflect
 
 import org.apache.logging.log4j.Level
-import org.apache.logging.log4j.kotlin.support.withListAppender
+import org.apache.logging.log4j.kotlin.reflect.support.withListAppender
 import org.junit.Test
 import kotlin.test.assertEquals
 
-class LoggerCompanionTest {
-  companion object {
-    val log = logger()
-  }
+class LoggerMixinCompanionExtendsTest {
+
+  companion object : Logging
 
   // note: using LoggerContextRule here to init the config does nothing as the initialization happens in the companion
   // log4j will fall back to the default config
 
   @Test
-  fun `Logging from a function instantiation via companion logs the correct class name`() {
+  fun `Logging from an interface mix-in via companion logs the correct class name`() {
     val msg = "This is an error log."
     val msgs = withListAppender { _, _ ->
-      log.error(msg)
+      logger.error(msg)
     }
 
     assertEquals(1, msgs.size.toLong())
@@ -41,7 +40,7 @@ class LoggerCompanionTest {
     msgs.first().also {
       assertEquals(Level.ERROR, it.level)
       assertEquals(msg, it.message.format)
-      assertEquals(LoggerCompanionTest::class.qualifiedName, it.loggerName)
+      assertEquals(LoggerMixinCompanionExtendsTest::class.qualifiedName, it.loggerName)
     }
   }
 }

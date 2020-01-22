@@ -109,30 +109,6 @@ class LoggerTest {
   }
 
   @Test
-  fun `Lambda functions are evaluated if the level is high enough`() {
-    var count = 0
-    fun lamdaFun(): String {
-      count++
-      return result
-    }
-    val log = logger()
-    log.info { lamdaFun() }
-    assertTrue { count == 1 }
-  }
-
-  @Test
-  fun `Lambda functions are not evaluated if the level is low enough`() {
-    var count = 0
-    fun lamdaFun(): String {
-      count++
-      return result
-    }
-    val log = logger()
-    log.debug { lamdaFun() }
-    assertTrue { count == 0 }
-  }
-
-  @Test
   fun `CharSequence messages are logged`() {
     val f = withLevelFixture(Level.INFO, true) {
       it.info(cseqMsg)

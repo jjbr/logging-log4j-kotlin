@@ -53,6 +53,11 @@
         <version>${project.version}</version>
       </dependency>
       <dependency>
+        <groupId>com.ripstech.coffeecup.logging.log4k</groupId>
+        <artifactId>log4j-api-kotlin-reflect</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
         <groupId>org.apache.logging.log4j</groupId>
         <artifactId>log4j-api</artifactId>
         <version>${log4j.version}</version>
@@ -218,5 +223,6 @@
   <modules>
     <module>log4j-api-kotlin</module>
     <module>log4j-api-kotlin-sample</module>
+    <module>log4j-api-kotlin-reflect</module>
   </modules>
 </project>
